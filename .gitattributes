@@ -1,0 +1,9 @@
+# 统一以 LF 入库、以 LF 检出。
+# build.sh 必须是 LF，否则在 Linux / WSL / Git Bash 下会报 "bad interpreter"；
+# .ps1 用 LF 也没问题（Windows PowerShell 5.1 与 PowerShell 7 都实测可执行）。
+* text=auto eol=lf
+
+# 二进制（构建产物本来就在 .gitignore 里，这里只是防止手滑提交）
+*.exe    binary
+*.zip    binary
+*.tar.gz binary
