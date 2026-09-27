@@ -1,0 +1,54 @@
+name: release
+
+# 推送到 v* 标签时，自动交叉编译全部平台产物并创建 GitHub Release：
+#
+#   git tag v1.0.1 && git push origin v1.0.1
+#
+# 产物校验和（dist/checksums.txt）会先自检，通过后才发 Release。
+# 带后缀的标签（如 v1.0.1-rc1）会被标记为 prerelease，不会占用 Latest。
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # gh release create 需要写权限
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false # 纯标准库、无第三方依赖，没有需要缓存的东西
+
+      - name: 静态检查
+        run: go vet ./...
+
+      - name: 交叉编译全部平台
+        run: ./build.sh
+
+      - name: 校验产物
+        working-directory: dist
+        run: sha256sum -c checksums.txt
+
+      - name: 创建 Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prerelease=()
+          case "${GITHUB_REF_NAME}" in
+            *-*) prerelease=(--prerelease) ;;
+          esac
+
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "Windows 用户下载 .zip，Linux / macOS / FreeBSD 用户下载 .tar.gz；解压后即为短名的 y-http-bench 可执行文件（tar.gz 已带 0755 权限，无需 chmod）。checksums.txt 是全部归档的 SHA256，可用 sha256sum -c 校验。" \
+            --generate-notes \
+            "${prerelease[@]}" \
+            dist/*.zip dist/*.tar.gz dist/checksums.txt
