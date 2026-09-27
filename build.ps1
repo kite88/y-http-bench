@@ -130,8 +130,10 @@ try {
         }
     }
 
-    # SHA256 checksums, LF line endings so `sha256sum -c` works on Linux.
-    $sums = foreach ($file in (Get-ChildItem -Path $OutDir -File | Where-Object { $_.Name -ne 'checksums.txt' } | Sort-Object Name)) {
+    # SHA256 checksums of the release artifacts (archives only: the
+    # uncompressed host binary is for local use and is never published).
+    # LF line endings so `sha256sum -c` works on Linux.
+    $sums = foreach ($file in (Get-ChildItem -Path $OutDir -File | Where-Object { $_.Name -match '\.(zip|tar\.gz)$' } | Sort-Object Name)) {
         '{0}  {1}' -f (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLower(), $file.Name
     }
     [System.IO.File]::WriteAllText((Join-Path $OutDir 'checksums.txt'), ($sums -join "`n") + "`n")

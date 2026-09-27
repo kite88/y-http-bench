@@ -38,8 +38,8 @@ dist/
 ├── y-http-bench-linux-arm64.tar.gz    →  y-http-bench   （带 0755 可执行位）
 ├── y-http-bench-darwin-arm64.tar.gz   →  y-http-bench
 ├── ……                                 （共 15 个平台）
-├── y-http-bench(.exe)                 ← 本机平台的未压缩版（如 linux/amd64、windows/amd64），直接能跑
-└── checksums.txt                      ← 上述所有文件的 SHA256（LF 换行，可 sha256sum -c）
+├── y-http-bench(.exe)                 ← 本机平台的未压缩版（如 linux/amd64、windows/amd64），本机自用、不发布
+└── checksums.txt                      ← 15 个归档的 SHA256（LF 换行，可 sha256sum -c）
 ```
 
 本机平台那一份不压缩地留在 `dist/` 里，日常直接跑，不用解压：
