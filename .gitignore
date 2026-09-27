@@ -1,0 +1,15 @@
+# 本地直接 go build 产生的可执行文件
+/y-http-bench
+/y-http-bench.exe
+
+# 交叉编译产物（build.ps1 输出，发布时挂到 GitHub Releases）
+/dist/
+
+# 压测产物
+*.csv
+*.log
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+.workbuddy/
