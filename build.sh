@@ -123,7 +123,9 @@ for target in $targets; do
     count=$((count + 1))
 done
 
-# SHA256 checksums of every artifact, LF line endings so `sha256sum -c` works.
+# SHA256 checksums of the release artifacts (archives only: the uncompressed
+# host binary is for local use and is never published).
+# LF line endings so `sha256sum -c` works.
 hash_of() {
     if command -v sha256sum >/dev/null 2>&1; then
         sha256sum "$1" | cut -d' ' -f1
@@ -131,7 +133,7 @@ hash_of() {
         shasum -a 256 "$1" | cut -d' ' -f1   # macOS
     fi
 }
-find "$out_dir" -maxdepth 1 -type f ! -name checksums.txt | LC_ALL=C sort | while IFS= read -r file; do
+find "$out_dir" -maxdepth 1 -type f \( -name '*.zip' -o -name '*.tar.gz' \) | LC_ALL=C sort | while IFS= read -r file; do
     printf '%s  %s\n' "$(hash_of "$file")" "$(basename "$file")"
 done > "$out_dir/checksums.txt"
 
