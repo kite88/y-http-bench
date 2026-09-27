@@ -1,5 +1,8 @@
 # y-http-bench · HTTP 压测工具
 
+[![Release](https://img.shields.io/github/v/release/kite88/y-http-bench)](https://github.com/kite88/y-http-bench/releases/latest)
+[![License](https://img.shields.io/github/license/kite88/y-http-bench)](LICENSE)
+
 用 Go（纯标准库）写的 HTTP 压测（benchmark）工具，单文件、零依赖、开箱即用。
 
 ## 编译
