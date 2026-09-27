@@ -66,9 +66,22 @@ PowerShell 7（`pwsh`），所以 Linux / macOS 装了 pwsh 也能跑同一份�
 > `zip(1)` 在 macOS / Linux 上也不是必然存在，而且各实现写出的字节不一致。`pack` 用 Go 标准库
 > 显式写入 0755，并把时间戳固定下来（tar.gz 显示 1970-01-01，zip 显示 zip 的纪元 1980-01-01），
 > 所以同源码无论在哪个平台、用哪个脚本构建，产物和校验和都可复现。
->
-> 发版时把 `dist/` 里的 `*.zip`、`*.tar.gz` 和 `checksums.txt` 传到 GitHub Releases 即可（本机版
-> 那个未压缩的二进制不用上传；Windows PowerShell 不展开通配符，需要逐个列出文件名）。
+
+### 发版
+
+推 `v*` 标签即可，workflow（`.github/workflows/release.yml`）会自动交叉编译全部平台并创建
+GitHub Release：
+
+```bash
+git tag v1.0.1 && git push origin v1.0.1
+```
+
+流程先跑 `go vet ./...`，再用 `sha256sum -c checksums.txt` 自检产物，任一步失败都不会发版；
+标签名含 `-`（如 `v1.1.0-rc1`）会自动标记为 prerelease，不会顶掉 Latest。
+
+需要手工发版、或想在本地完整试跑一遍流程时，把 `dist/` 里的 `*.zip`、`*.tar.gz` 和
+`checksums.txt` 传到 Releases 即可：本机版那个未压缩的二进制不用上传，Windows PowerShell 不展开
+通配符、需要逐个列出文件名。
 
 ## 快速开始
 
