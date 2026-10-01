@@ -1,6 +1,6 @@
-# y-http-bench · HTTP Benchmark Tool
-
 [简体中文](README.md) | English
+
+# y-http-bench · HTTP Benchmark Tool
 
 [![Release](https://img.shields.io/github/v/release/kite88/y-http-bench)](https://github.com/kite88/y-http-bench/releases/latest)
 [![License](https://img.shields.io/github/license/kite88/y-http-bench)](LICENSE)
